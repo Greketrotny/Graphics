@@ -5,25 +5,33 @@
 
 namespace Graphics
 {
-	template<class T> class Point2D
+	template<typename T> struct Point
 	{
-		// -- fields -- //
 	public:
 		T x, y;
 
 
-		// -- constructor -- //
 	public:
-		Point2D(T x, T y)
-			:x(x), y(y)
+		Point(T x, T y)
+			: x(x)
+			, y(y)
 		{
 		}
-		~Point2D()
+		Point(const Point& point)
+			: x(point.x)
+			, y(point.y)
+		{
+		}
+		Point(Point&& point)
+			: x(point.x)
+			, y(point.y)
+		{
+		}
+		~Point()
 		{
 		}
 
 
-		// -- operators -- //
 	public:
 		Point& operator=(const Point& point)
 		{
@@ -61,7 +69,6 @@ namespace Graphics
 		}
 
 
-		// -- methods -- //
 	public:
 		T Magnitude()
 		{

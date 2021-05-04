@@ -1,29 +1,27 @@
-#include "Bitmap.h"
+#include "bitmap.h"
 
 namespace Graphics
 {
-	// [CLASS] Bitmap -----------------------------|
-	// -- constructors -- //
 	Bitmap::Bitmap(const Bitmap &bitmap)
-		:width(bitmap.width),
-		height(bitmap.height)
+		:m_width(bitmap.m_width),
+		m_height(bitmap.m_height)
 	{
 		if (colorMap) delete colorMap;
-		colorMap = new Color[width * height];
+		colorMap = new Color[m_width * m_height];
 
 
 		// copy pixels
-		for (unsigned int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < m_width; x++)
 		{
-			for (unsigned int y = 0; y < height; y++)
+			for (unsigned int y = 0; y < m_height; y++)
 			{
 				SetPixel(x, y, bitmap.GetPixel(x, y));
 			}
 		}
 	}
-	Bitmap::Bitmap(Bitmap &&bitmap)
-		:width(bitmap.width),
-		height(bitmap.height)
+	Bitmap::Bitmap(Bitmap &&bitmap) noexcept
+		:m_width(bitmap.m_width),
+		m_height(bitmap.m_height)
 	{
 		if (bitmap.colorMap)
 		{
@@ -31,16 +29,18 @@ namespace Graphics
 			bitmap.colorMap = nullptr;
 		}
 	}
-	Bitmap::Bitmap(unsigned int width, unsigned int height)
-		:width(width),
-		height(height)
+	Bitmap::Bitmap(
+		size_t width, size_t height,
+		const Color& fill_color)
+		:m_width(width),
+		m_height(height)
 	{
-		colorMap = new Color[width * height];
-		for (unsigned int x = 0; x < width; ++x)
+		colorMap = new Color[m_width * m_height];
+		for (size_t x = 0u; x < m_width; ++x)
 		{
-			for (unsigned int y = 0; y < height; ++y)
+			for (size_t y = 0u; y < m_height; ++y)
 			{
-				SetPixel(x, y, Color(255, 255, 255, 255));
+				SetPixel(x, y, fill_color);
 			}
 		}
 	}
@@ -49,29 +49,34 @@ namespace Graphics
 		if (colorMap) delete colorMap;
 	}
 
-	// -- operators -- //
 	Bitmap& Bitmap::operator=(const Bitmap& bitmap)
 	{
-		this->width = bitmap.width;
-		this->height = bitmap.height;
+		if (m_width != bitmap.m_width || m_height != bitmap.m_height)
+		{
+			m_width = bitmap.m_width;
+			m_height = bitmap.m_height;
 
-		if (colorMap) delete[] colorMap;
-		colorMap = new Color[width * height];
+			if (colorMap) delete[] colorMap;
+			colorMap = new Color[m_width * m_height];
+		}		
 
 		// copy pixels
-		for (unsigned int x = 0; x < width; x++)
+		Color* ptr1 = this->GetMapAddress();
+		Color* end = ptr1 + m_width * m_height;
+		Color* ptr2 = bitmap.GetMapAddress();
+		while(ptr1 < end)
 		{
-			for (unsigned int y = 0; y < height; y++)
-			{
-				SetPixel(x, y, bitmap.GetPixel(x, y));
-			}
+			*ptr1 = *ptr2;
+			++ptr1;
+			++ptr2;
 		}
+
 		return *this;
 	}
-	Bitmap& Bitmap::operator=(Bitmap&& bitmap)
+	Bitmap& Bitmap::operator=(Bitmap&& bitmap) noexcept
 	{
-		this->width = bitmap.width;
-		this->height = bitmap.height;
+		m_width = bitmap.m_width;
+		m_height = bitmap.m_height;
 
 		if (bitmap.colorMap)
 		{
@@ -83,44 +88,78 @@ namespace Graphics
 		return *this;
 	}
 
-	// -- methods -- //
-	void Bitmap::Resize(unsigned int newWidth, unsigned int newHeight)
+	void Bitmap::Resize(size_t newWidth, size_t newHeight)
 	{
-		this->width = newWidth;
-		this->height = newHeight;
+		if (newWidth == m_width && newHeight == m_height)
+			return; 
+
+		m_width = newWidth;
+		m_height = newHeight;
 
 		if (colorMap) delete[] colorMap;
-		colorMap = new Color[width * height];
-		for (unsigned int x = 0; x < width; ++x)
+		colorMap = new Color[m_width * m_height];
+		for (size_t x = 0; x < m_width; ++x)
 		{
-			for (unsigned int y = 0; y < height; ++y)
+			for (size_t y = 0; y < m_height; ++y)
 			{
 				SetPixel(x, y, Color(255, 255, 255, 255));
 			}
 		}
 	}
-	Color* Bitmap::GetMapAddress()
+	Color* Bitmap::GetMapAddress() const
 	{
 		return colorMap;
 	}
-
-	// -- getters and seters -- //
-	const Color& Bitmap::GetPixel(const unsigned int& x, const unsigned int& y) const
+	void Bitmap::Clear(const Color& color)
 	{
-		return colorMap[y * width + x];
+		Color* begin = this->GetMapAddress();
+		Color* end = begin + m_width * m_height;
+		while (begin < end)
+		{
+			*begin = color;
+			++begin;
+		}
 	}
-	void Bitmap::SetPixel(const unsigned int& x, const unsigned int& y, const Color& color)
+	void Bitmap::Clear(const unsigned int& colorValue)
 	{
-		colorMap[y * width + x] = color;
+		Clear(Color(colorValue));
+	}
+	void Bitmap::Clear(const unsigned char& red,
+		const unsigned char& green,
+		const unsigned char& blue,
+		const unsigned char& alpha)
+	{
+		Clear(Color(red, green, blue, alpha));
+	}
+
+	const Color& Bitmap::GetPixel(const size_t& x, const size_t& y) const
+	{
+		return colorMap[y * m_width + x];
+	}
+	void Bitmap::SetPixel(const size_t& x, const size_t& y, const Color& color)
+	{
+		colorMap[y * m_width + x] = color;
+	}
+	void Bitmap::SetPixel(const size_t& x, const size_t& y, const unsigned int& colorValue)
+	{
+		colorMap[y * m_width + x] = Color(colorValue);
 	}
 	void Bitmap::SetPixel(
-		const unsigned int& x, const unsigned int& y,
+		const size_t& x, const size_t& y,
 		const unsigned char& r, 
 		const unsigned char& g, 
 		const unsigned char& b, 
 		const unsigned char& a)
 	{
-		colorMap[y * width + x] = Color(r, g, b, a);
+		colorMap[y * m_width + x] = Color(r, g, b, a);
 	}
-	// [CLASS] Bitmap -----------------------------|
+
+	size_t Bitmap::GetWidth() const
+	{
+		return m_width;
+	}
+	size_t Bitmap::GetHeight() const
+	{
+		return m_height;
+	}
 }

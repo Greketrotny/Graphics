@@ -7,38 +7,49 @@ namespace Graphics
 {
 	class Bitmap
 	{
-		// -- fields -- //
 	private:
 		Color *colorMap = nullptr;
-		unsigned int width, height;
+		size_t m_width, m_height;
 
-		// -- constructors -- //
+
 	public:
 		Bitmap(const Bitmap &bitmap);
-		Bitmap(Bitmap &&bitmap);
-		Bitmap(unsigned int width, unsigned int height);
+		Bitmap(Bitmap &&bitmap) noexcept;
+		Bitmap(
+			size_t width, size_t height, 
+			const Color& fill_color = Color(255u, 255u, 255u, 255u));
 		~Bitmap();
 
-		// -- operators -- //
+
 		Bitmap& operator=(const Bitmap& bitmap);
-		Bitmap& operator=(Bitmap&& bitmap);
+		Bitmap& operator=(Bitmap&& bitmap) noexcept;
 
-		// -- methods -- //
-	public:
-		void Resize(unsigned int newWidth, unsigned int newHeight);
-		Color* GetMapAddress();
 
-		// -- getters and setters -- //
 	public:
-		const Color& GetPixel(const unsigned int& x, const unsigned int& y) const;
-		void SetPixel(const unsigned int& x, const unsigned int& y, const Color& color);
-		void SetPixel(
-			const unsigned int& x, const unsigned int& y, 
+		void Resize(size_t width, size_t height);
+		Color* GetMapAddress() const;
+		void Clear(const Color& color);
+		void Clear(const unsigned int& color_value);
+		void Clear(
 			const unsigned char& red,
 			const unsigned char& green,
 			const unsigned char& blue,
-			const unsigned char& alpha = 0xFF
-		);
+			const unsigned char& alpha = 0xFF);
+
+
+	public:
+		const Color& GetPixel(const size_t& x, const size_t& y) const;
+		void SetPixel(const size_t& x, const size_t& y, const Color& color);
+		void SetPixel(const size_t& x, const size_t& y, const unsigned int& color_value);
+		void SetPixel(
+			const size_t& x, const size_t& y,
+			const unsigned char& red,
+			const unsigned char& green,
+			const unsigned char& blue,
+			const unsigned char& alpha = 0xFF);
+
+		size_t GetWidth() const;
+		size_t GetHeight() const;
 	};
 }
 
