@@ -5,53 +5,61 @@ namespace Graphics
 {
 	class Color
 	{
-	private:
-		unsigned int color;
-
-		// static colors
+		typedef unsigned char uchar;
 	public:
-		static const Color White, Red, Green, Blue, Yellow, Purple, Aqua, Black;
-
+		uchar red, green, blue, alpha;
 
 	public:
-		Color();
-		Color(const Color &color);
-		Color(const unsigned int& color);
-		Color(const unsigned char& red,	const unsigned char& green, const unsigned char& blue, const unsigned char& alpha = 0xFF);
+		struct Palette
+		{
+			static const Color
+				Maroon, DarkRed, Brown, Firebrick,
+				Crimson, Red, Tomato, Coral,
+				IndianRed, LightCoral, DarkSalmon, Salmon,
+				LightSalmon, OrangeRed, DarkOrange, Orange,
+				Gold, DarkGoldenRod, GoldenRod, PaleGoldenRod,
+				DarkKhaki, Khaki, Olive, Yellow,
+				YellowGreen, DarkOliveGreen, OliveDrab, LawnGreen,
+				ChartReuse, GreenYellow, DarkGreen, Green,
+				ForestGreen, Lime, LimeGreen, LightGreen,
+				PaleGreen, DarkSeaGreen, MediumSpringGreen, SpringGreen,
+				SeaGreen, MediumAquaMarine, MediumSeaGreen, LightSeaGreen,
+				DarkSlateGray, Teal, DarkCyan, Aqua,
+				Cyan, LightCyan, DarkTurquoise, Turquoise,
+				MediumTurquoise, PaleTurquoise, AquaMarine, PowderBlue,
+				CadetBlue, SteelBlue, CornFlowerBlue, DeepSkyBlue,
+				DodgerBlue, LightBlue, SkyBlue, LightSkyBlue,
+				MidnightBlue, Navy, DarkBlue, MediumBlue,
+				Blue, RoyalBlue, BlueViolet, Indigo,
+				DarkSlateBlue, SlateBlue, MediumSlateBlue, MediumPurple,
+				DarkMagenta, DarkViolet, DarkOrchid, MediumOrchid,
+				Purple, Thistle, Plum, Violet,
+				Magenta, Orchid, MediumVioletRed, PaleVioletRed,
+				DeepPink, HotPink, LightPink, Pink,
+				AntiqueWhite, Beige, Bisque, BlanchedAlmond,
+				Wheat, CornSilk, LemonChiffon, LightGoldenRodYellow,
+				LightYellow, SaddleBrown, Sienna, Chocolate,
+				Peru, SandyBrown, BurlyWood, Tan,
+				RosyBrown, Moccasin, NavajoWhite, PeachPuff,
+				MistyRose, LavenderBlush, Linen, OldLace,
+				PapayaWhip, SeaShell, MintCream, SlateGray,
+				LightSlateGray, LightSteelBlue, Lavender, FloralWhite,
+				AliceBlue, GhostWhite, Honeydew, Ivory,
+				Azure, Snow, Black, DimGrey,
+				Grey, DarkGrey, Silver, LightGrey,
+				Gainsboro, WhiteSmoke, White;
+		};
 
 
 	public:
-		Color& operator=(const Color& color);
-		Color& operator=(Color&& color) noexcept;
-
-
-	public:
-		static Color BlendAverage(const Color& color1, const Color& color2);
-		static Color BlendAddition(const Color& color1, const Color& color2);
-		static Color BlendProduct(const Color& color1, const Color& color2);
-
+		constexpr explicit Color(const uchar& value = uchar(0xFFu));
+		constexpr Color(const uchar& red, const uchar& green, const uchar& blue, const uchar& alpha = uchar(0xFFu));
+		constexpr Color(const Color &color);
 
 	public:
-		Color BlendAverage(const Color& color);
-		Color BlendAddition(const Color& color);
-		Color BlendProduct(const Color& color);
-
-
-	public:
-		unsigned char GetR() const;
-		unsigned char GetG() const;
-		unsigned char GetB() const;
-		unsigned char GetA() const;
-		unsigned int GetColor() const;
-		void SetR(const unsigned char& red);
-		void SetG(const unsigned char& green);
-		void SetB(const unsigned char& blue);
-		void SetA(const unsigned char& alpha);
-		void SetColor(
-			const unsigned char& red, 
-			const unsigned char& green, 
-			const unsigned char& blue, 
-			const unsigned char& alpha = 0xFF);
+		constexpr Color& operator=(const Color& color);
+		constexpr Color& operator=(Color&& color) noexcept;
+		constexpr Color& operator=(const uchar& value);
 	};
 }
 
