@@ -32,9 +32,6 @@
     <ClCompile Include="compile_unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

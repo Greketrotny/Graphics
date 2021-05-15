@@ -52,14 +52,14 @@ namespace Graphics
 
 
 	public:
-		constexpr explicit Color(const uchar& value = uchar(0xFFu));
-		constexpr Color(const uchar& red, const uchar& green, const uchar& blue, const uchar& alpha = uchar(0xFFu));
-		constexpr Color(const Color &color);
+		Color(const uchar& value = uchar(0xFFu));
+		Color(const uchar& red, const uchar& green, const uchar& blue, const uchar& alpha = uchar(0xFFu));
+		Color(const Color &color);
 
 	public:
-		constexpr Color& operator=(const Color& color);
-		constexpr Color& operator=(Color&& color) noexcept;
-		constexpr Color& operator=(const uchar& value);
+		Color& operator=(const Color& color);
+		Color& operator=(Color&& color) noexcept;
+		Color& operator=(const uchar& value);
 	};
 }
 

@@ -142,30 +142,30 @@ namespace Graphics
 	const Color Color::Palette::WhiteSmoke(0xF5, 0xF5, 0xF5);
 	const Color Color::Palette::White(0xFF, 0xFF, 0xFF);
 
-	constexpr Color::Color(const uchar& value)
+	Color::Color(const uchar& value)
 		: red(value)
 		, green(value)
 		, blue(value)
 		, alpha(value)
 	{}
-	constexpr Color::Color(
-		const uchar& red, 
-		const uchar& green, 
-		const uchar& blue, 
+	Color::Color(
+		const uchar& red,
+		const uchar& green,
+		const uchar& blue,
 		const uchar& alpha)
 		: red(red)
 		, green(green)
 		, blue(blue)
 		, alpha(alpha)
 	{}
-	constexpr Color::Color(const Color &color)
+	Color::Color(const Color &color)
 		: red(color.red)
 		, green(color.green)
 		, blue(color.blue)
 		, alpha(color.alpha)
 	{}
 
-	constexpr Color& Color::operator=(const Color &color)
+	Color& Color::operator=(const Color &color)
 	{
 		red = color.red;
 		green = color.green;
@@ -173,7 +173,7 @@ namespace Graphics
 		alpha = color.alpha;
 		return *this;
 	}
-	constexpr Color& Color::operator=(Color&& color) noexcept
+	Color& Color::operator=(Color&& color) noexcept
 	{
 		red = color.red;
 		green = color.green;
@@ -181,7 +181,7 @@ namespace Graphics
 		alpha = color.alpha;
 		return *this;
 	}
-	constexpr Color& Color::operator=(const uchar& value)
+	Color& Color::operator=(const uchar& value)
 	{
 		red = value;
 		green = value;

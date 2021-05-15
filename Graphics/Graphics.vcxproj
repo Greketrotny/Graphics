@@ -158,7 +158,6 @@
     <ClInclude Include="rect.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bitmap.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="compile_unit.cpp" />
   </ItemGroup>
